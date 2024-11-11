@@ -98,7 +98,7 @@ comments:
   # Giscus options › https://giscus.app
   giscus:
     repo: CoderJackLiu/CoderJackLiu.github.io
-    repo_id: 646048362
+    repo_id: R_kgDOJoHqag
     category: General 
     category_id: DIC_kwDOJoHqas4CkJND
     mapping: # optional, default to 'pathname'
