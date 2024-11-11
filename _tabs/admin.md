@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: login
 icon: fas fa-info-circle
 order: 5
 ---
@@ -7,7 +7,7 @@ order: 5
 <!-- > Add Markdown syntax content to file `_tabs/about.md`{: .filepath } and it will show up on this page.
 {: .prompt-tip } -->
 
-
+<!-- 
 
 # 于谦
 
@@ -40,4 +40,4 @@ order: 5
 
 于谦因功高震主而遭人忌恨，后被英宗诬陷以“谋反罪”冤死，终年59岁。尽管如此，他的英勇事迹和忠诚爱国精神一直被后人铭记。清朝时，朝廷追谥他为“忠肃”，并立祠纪念。
 
-于谦的品格、才华和贡献使他成为中国历史上忠诚与正直的象征，被历代文人墨客称赞，视为典范。他的忠义精神和高尚品德，至今仍为世人敬仰。
+于谦的品格、才华和贡献使他成为中国历史上忠诚与正直的象征，被历代文人墨客称赞，视为典范。他的忠义精神和高尚品德，至今仍为世人敬仰。 -->
