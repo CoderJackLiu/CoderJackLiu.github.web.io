@@ -48,6 +48,7 @@ button:hover {
 }
 </style>
 
+<link rel="stylesheet" type="text/css" href="/assets/css/style.css">
 <article class="px-1">
   {% if page.layout == 'page' or page.collection == 'tabs' %}
     {% assign tab_key = page.title | downcase %}
@@ -59,17 +60,17 @@ button:hover {
     {{ content }}
   {% endif %}
 </article>
-
 <div class="login-container">
-      <form>
-          <div class="form-group">
-              <label for="username">Username:</label>
-              <input type="text" id="username" name="username" required>
-          </div>
-          <div class="form-group">
-              <label for="password">Password:</label>
-              <input type="password" id="password" name="password" required>
-          </div>
-          <button type="submit">Login</button>
-      </form>
-  </div>
+  <form id="loginForm">
+      <div class="form-group">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required>
+      </div>
+      <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required>
+      </div>
+      <button type="submit">Login</button>
+  </form>
+</div>
+<script src="js/login.js"></script>
