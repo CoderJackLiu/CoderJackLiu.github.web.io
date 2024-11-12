@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const validPassword = '1';
         
             if (username === validUsername && password === validPassword) {
-                window.location.href = '/admin'; // 跳转到编辑页
+                window.location.href = '/admin/edit'; // 跳转到编辑页
             } else {
                 showErrorMessage('账号或密码错误');
 
