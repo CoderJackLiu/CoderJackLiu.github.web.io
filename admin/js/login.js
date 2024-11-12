@@ -8,11 +8,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const password = document.getElementById('password').value;
         
             // 固定的账号密码
-            const validUsername = 'admin';
-            const validPassword = '123';
+            const validUsername = '1';
+            const validPassword = '1';
         
             if (username === validUsername && password === validPassword) {
-                window.location.href = '/edit.html'; // 跳转到编辑页
+                window.location.href = '/admin'; // 跳转到编辑页
             } else {
                 showErrorMessage('账号或密码错误');
 
