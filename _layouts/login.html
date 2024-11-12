@@ -2,61 +2,55 @@
 layout: default
 ---
 <style>
-  /* Center the login form */
-  .login-container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #f9f9f9;
-    text-align: center;
-  }
+ /* Center the login form */
+.login-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0); /* Semi-transparent background */
+  box-shadow: 0 0 10px rgba(128,128,128, 0.5);
+  text-align: center;
+}
 
-  /* Style the form fields */
-  .form-group {
-    margin-bottom: 30px; /* Increase margin-bottom for more spacing */
-    text-align: left;
-  }
+/* Style the form fields */
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
 
-  .form-group label {
-    display: inline-block;
-    width: 100px; /* Adjust width as needed */
-    text-align: right;
-    margin-right: 10px; /* Space between label and input */
-  }
+.form-group label {
+  display: inline-block;
+  width: 100px;
+  text-align: right;
+  margin-right: 10px;
+}
 
-  .login-input {
-    width: calc(100% - 120px); /* Adjust width based on label width and margin-right */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-  }
+.form-group input {
+  width: calc(100% - 120px); /* Adjust width to fit input */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
 
-  /* Style the submit button */
-  .login-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(128,128,128, 0.5);
+  color: white;
+  cursor: pointer;
+}
 
-  .login-button:hover {
-    background-color: #0056b3;
-  }
+button:hover {
+  background-color: #0056b3;
+}
 </style>
 
 <article class="px-1">
   {% if page.layout == 'page' or page.collection == 'tabs' %}
     {% assign tab_key = page.title | downcase %}
     {% assign title = site.data.locales[lang].tabs[tab_key] | default: page.title %}
-    <h1 class="dynamic-title">
-      {{ title }}
-    </h1>
     <div class="content">
       {{ content }}
     </div>
@@ -66,16 +60,15 @@ layout: default
 </article>
 
 <div class="login-container">
-  <h2>Login</h2>
-  <form action="/login" method="post">
-    <div class="form-group">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" class="login-input" required>
-    </div>
-    <div class="form-group">
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" class="login-input" required>
-    </div>
-    <button type="submit" class="login-button">Login</button>
-  </form>
-</div>
+      <form>
+          <div class="form-group">
+              <label for="username">Username:</label>
+              <input type="text" id="username" name="username" required>
+          </div>
+          <div class="form-group">
+              <label for="password">Password:</label>
+              <input type="password" id="password" name="password" required>
+          </div>
+          <button type="submit">Login</button>
+      </form>
+  </div>
