@@ -55,7 +55,10 @@ jobs:
           bundle exec htmlproofer _site \
             \-\-disable-external \
             \-\-ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
-            
+
+      - name: Stop existing Foreman processes
+        run: sudo pkill -f foreman || true   
+        
       - name: Start Server
         run: |
           gem install foreman
