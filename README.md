@@ -46,3 +46,24 @@ This work is published under [MIT][mit] License.
 
 set http_proxy=http://127.0.0.1:8889
 set https_proxy=http://127.0.0.1:8889
+
+
+https://github.com/login/oauth/authorize?client_id=Ov23liOwXgpwKGbOuQYn&login_hint=&redirect_uri=https%3A%2F%2Funrealdev-auth.us.auth0.com%2Flogin%2Fcallback&response_type=code&scope=user%3Aemail&state=i4QJ0NBX_KexL9jo4vcmlW7E9H9jOLOP
+
+https://unrealdev.cn/admin/edit
+
+http://127.0.0.1:4000/admin/edit
+
+
+
+
+##注意：
+1. 当下次想使用的时候，需要用 ngrok 启用一个服务  
+ ```
+ ngrok authtoken YOUR_NGROK_AUTHTOKEN (https://ngrok.com/ 官网查看，谷歌登录)
+ ```
+2. 启动服务
+ ```
+ ngrok http 4567
+ ```
+3. 修改edit的代码，修改 redirect_uri 的值为ngrok命令行显示的映射的URL； 这样公开的url就可以配置上了；
