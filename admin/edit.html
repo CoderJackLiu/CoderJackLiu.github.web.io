@@ -38,23 +38,17 @@ title: edit
 
 <!-- 引入脚本 -->
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<script src="https://cdn.auth0.com/js/auth0/9.13/auth0.min.js"></script>
 <script>
-  var client_id = 'Ov23liOwXgpwKGbOuQYn';
-  var redirect_uri = 'https://c155-240e-306-2e6a-5300-c0e4-ac26-a10a-3755.ngrok-free.app/callback'; // 修改为实际的回调URL
+  var auth0 = new auth0.WebAuth({
+    domain: 'unrealdev-auth.us.auth0.com',
+    clientID: 'LoFI0i6xPR0OLVXp6dVVbpavr6PAMruQ',
+    redirectUri: 'https://c155-240e-306-2e6a-5300-c0e4-ac26-a10a-3755.ngrok-free.app/callback',
+    responseType: 'token id_token',
+    scope: 'openid profile'
+  });
 
   var simplemde = new SimpleMDE({ element: document.getElementById("markdown-editor") });
-
-  // 获取 URL 参数
-  function getQueryParams() {
-    var params = {};
-    var queryString = window.location.search.substring(1);
-    var regex = /([^&=]+)=([^&]*)/g;
-    var m;
-    while (m = regex.exec(queryString)) {
-      params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
-    }
-    return params;
-  }
 
   // 发布博客
   function publishBlog() {
@@ -64,12 +58,11 @@ title: edit
       showMessage('博客名称不能为空', 'error');
       return;
     }
-    var filePath = `_posts/${new Date().toISOString().slice(0, 10)}-${blogTitle.replace(/ /g, '-').toLowerCase()}.md`; // 根据实际情况修改文件路径
-    var token = localStorage.getItem('github_token');
+    var filePath = `_posts/${new Date().toISOString().slice(0, 10)}-${blogTitle.replace(/ /g, '-').toLowerCase()}.md`;
+    var token = localStorage.getItem('id_token');
 
     if (!token) {
-      var authUrl = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=repo`;
-      window.open(authUrl, 'oauth', 'width=600,height=700');
+      auth0.authorize();
       return;
     }
 
@@ -82,7 +75,7 @@ title: edit
       },
       body: JSON.stringify({
         message: 'Update blog post',
-        content: btoa(`# ${blogTitle}\n\n${markdownContent}`) // 将内容编码为 base64
+        content: btoa(`# ${blogTitle}\n\n${markdownContent}`)
       })
     }).then(response => {
       if (response.ok) {
@@ -104,20 +97,24 @@ title: edit
 
   // 发布按钮点击事件
   document.getElementById("publish-button").addEventListener("click", function() {
-    var token = localStorage.getItem('github_token');
+    var token = localStorage.getItem('id_token');
     if (token) {
       publishBlog();
     } else {
-      var authUrl = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=repo`;
-      window.open(authUrl, 'oauth', 'width=600,height=700');
+      auth0.authorize();
     }
   });
 
   // 监听消息事件以接收 token
-  window.addEventListener('message', function(event) {
-    if (event.origin === window.location.origin && event.data.token) {
-      localStorage.setItem('github_token', event.data.token);
-      publishBlog();
-    }
+  window.addEventListener('load', function() {
+    auth0.parseHash(function(err, authResult) {
+      if (authResult && authResult.accessToken && authResult.idToken) {
+        localStorage.setItem('access_token', authResult.accessToken);
+        localStorage.setItem('id_token', authResult.idToken);
+        publishBlog();
+      } else if (err) {
+        console.log(err);
+      }
+    });
   });
 </script>
