@@ -59,7 +59,7 @@ jobs:
       - name: Start Server
         run: |
           gem install foreman
-          foreman start
+          timeout 10s foreman start
         env:
           JEKYLL_ENV: "production"
 
