@@ -3,5 +3,121 @@ layout: default
 title: edit
 ---
 
-<h1>这是一个自定义页面</h1>
-<p>edit</p>
+<h1>博客编辑和发布界面</h1>
+
+<!-- 引入 SimpleMDE 样式 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+
+<!-- 样式调整 -->
+<style>
+  .editor {
+    width: 100%;
+    height: 70vh;
+  }
+  .editor .CodeMirror {
+    height: 100%;
+  }
+  #resultMessage {
+    margin-top: 20px;
+    font-size: 16px;
+  }
+</style>
+
+<!-- 博客名称输入框 -->
+<label for="blog-title">博客名称:</label>
+<input type="text" id="blog-title" placeholder="输入博客名称">
+
+<!-- Markdown 编辑器 -->
+<textarea id="markdown-editor" class="editor"></textarea>
+
+<!-- 发布按钮 -->
+<button id="publish-button">发布</button>
+
+<!-- 消息显示区域 -->
+<div id="resultMessage"></div>
+
+<!-- 引入脚本 -->
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<script>
+  var client_id = 'Ov23liOwXgpwKGbOuQYn';
+  var redirect_uri = 'https://c155-240e-306-2e6a-5300-c0e4-ac26-a10a-3755.ngrok-free.app/callback'; // 修改为实际的回调URL
+
+  var simplemde = new SimpleMDE({ element: document.getElementById("markdown-editor") });
+
+  // 获取 URL 参数
+  function getQueryParams() {
+    var params = {};
+    var queryString = window.location.search.substring(1);
+    var regex = /([^&=]+)=([^&]*)/g;
+    var m;
+    while (m = regex.exec(queryString)) {
+      params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+    }
+    return params;
+  }
+
+  // 发布博客
+  function publishBlog() {
+    var markdownContent = simplemde.value();
+    var blogTitle = document.getElementById('blog-title').value;
+    if (!blogTitle) {
+      showMessage('博客名称不能为空', 'error');
+      return;
+    }
+    var filePath = `_posts/${new Date().toISOString().slice(0, 10)}-${blogTitle.replace(/ /g, '-').toLowerCase()}.md`; // 根据实际情况修改文件路径
+    var token = localStorage.getItem('github_token');
+
+    if (!token) {
+      var authUrl = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=repo`;
+      window.open(authUrl, 'oauth', 'width=600,height=700');
+      return;
+    }
+
+    // GitHub API 请求
+    fetch('https://api.github.com/repos/CoderJackLiu/CoderJackLiu.github.io/contents/' + filePath, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'token ' + token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: 'Update blog post',
+        content: btoa(`# ${blogTitle}\n\n${markdownContent}`) // 将内容编码为 base64
+      })
+    }).then(response => {
+      if (response.ok) {
+        showMessage('发布成功！', 'success');
+      } else {
+        response.json().then(data => {
+          showMessage('发布失败：' + (data.message || response.statusText), 'error');
+        });
+      }
+    });
+  }
+
+  // 显示消息
+  function showMessage(message, type) {
+    var resultMessage = document.getElementById('resultMessage');
+    resultMessage.textContent = message;
+    resultMessage.className = type;
+  }
+
+  // 发布按钮点击事件
+  document.getElementById("publish-button").addEventListener("click", function() {
+    var token = localStorage.getItem('github_token');
+    if (token) {
+      publishBlog();
+    } else {
+      var authUrl = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=repo`;
+      window.open(authUrl, 'oauth', 'width=600,height=700');
+    }
+  });
+
+  // 监听消息事件以接收 token
+  window.addEventListener('message', function(event) {
+    if (event.origin === window.location.origin && event.data.token) {
+      localStorage.setItem('github_token', event.data.token);
+      publishBlog();
+    }
+  });
+</script>
