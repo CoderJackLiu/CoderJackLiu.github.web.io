@@ -62,7 +62,7 @@ title: edit
     var token = localStorage.getItem('id_token');
 
     if (!token) {
-      auth0.authorize();
+      openAuthPopup();
       return;
     }
 
@@ -101,11 +101,11 @@ title: edit
     if (token) {
       publishBlog();
     } else {
-      auth0.authorize();
+      openAuthPopup();
     }
   });
 
-  // 监听消息事件以接收 token
+  // 处理 Auth0 回调
   window.addEventListener('load', function() {
     auth0.parseHash(function(err, authResult) {
       if (authResult && authResult.accessToken && authResult.idToken) {
@@ -117,4 +117,23 @@ title: edit
       }
     });
   });
+
+  // 打开 Auth0 弹窗
+  function openAuthPopup() {
+    auth0.popup.authorize({
+      redirectUri: 'https://unrealdev.cn/admin/edit',
+      responseType: 'token id_token',
+      scope: 'openid profile'
+    }, function(err, authResult) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      if (authResult && authResult.accessToken && authResult.idToken) {
+        localStorage.setItem('access_token', authResult.accessToken);
+        localStorage.setItem('id_token', authResult.idToken);
+        publishBlog();
+      }
+    });
+  }
 </script>
